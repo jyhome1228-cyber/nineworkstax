@@ -4,83 +4,180 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#395edf">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>NINEWORKS TAX</title>
   <meta name="description" content="세금계산서 기반 거래·거래처·문서 통합 관리 시스템">
-  <link rel="stylesheet" href="./assets/styles.css">
+  <link rel="stylesheet" href="./assets/styles.css?v=20260912-1530">
 </head>
 <body>
   <input id="fileInput" type="file" accept=".pdf,.xml,.jpg,.jpeg,.png" hidden>
-  <header class="mobile-topbar"><div class="mobile-brand">NINEWORKS TAX</div><button class="mobile-menu" type="button" aria-label="메뉴">☰</button></header>
+
+  <header class="mobile-topbar">
+    <div class="mobile-brand">NINEWORKS TAX</div>
+    <button class="mobile-menu" type="button" aria-label="메뉴">☰</button>
+  </header>
+
   <div class="app-shell">
     <aside class="sidebar">
-      <div class="brand"><div class="brand-mark">N</div><div class="brand-copy"><strong>NINEWORKS TAX</strong><span>Finance Operations</span></div></div>
+      <div class="brand">
+        <div class="brand-mark">N</div>
+        <div class="brand-copy"><strong>NINEWORKS TAX</strong><span>Finance Operations</span></div>
+      </div>
+
       <nav class="nav" aria-label="주요 메뉴">
-        <a class="nav-item active" href="#" data-view="dashboard"><span class="nav-icon">⌂</span>대시보드</a>
-        <a class="nav-item" href="#" data-view="upload"><span class="nav-icon">⇧</span>문서 업로드</a>
-        <a class="nav-item" href="#" data-view="transactions"><span class="nav-icon">▤</span>거래</a>
-        <a class="nav-item" href="#" data-view="clients"><span class="nav-icon">◎</span>거래처</a>
-        <a class="nav-item" href="#" data-view="documents"><span class="nav-icon">□</span>문서</a>
-        <a class="nav-item" href="#" data-view="stats"><span class="nav-icon">▥</span>통계</a>
+        <a class="nav-item active" href="#dashboard" data-view="dashboard"><span class="nav-icon">⌂</span>대시보드</a>
+        <a class="nav-item" href="#upload" data-view="upload"><span class="nav-icon">⇧</span>문서 업로드</a>
+        <a class="nav-item" href="#transactions" data-view="transactions"><span class="nav-icon">▤</span>거래</a>
+        <a class="nav-item" href="#clients" data-view="clients"><span class="nav-icon">◎</span>거래처</a>
+        <a class="nav-item" href="#documents" data-view="documents"><span class="nav-icon">□</span>문서</a>
+        <a class="nav-item" href="#stats" data-view="stats"><span class="nav-icon">▥</span>통계</a>
       </nav>
-      <div class="sidebar-foot"><button type="button" data-view="settings" class="nav-item" style="padding-left:0">⚙ 설정</button><p>© 2026 NINEWORKS</p></div>
+
+      <div class="sidebar-foot">
+        <button type="button" data-view="settings" class="nav-item" style="padding-left:0">⚙ 설정</button>
+        <p style="margin-bottom:4px">© 2026 NINEWORKS</p>
+        <p style="margin-top:0;color:#395edf;font-weight:700">Interactive MVP · v0.2.1</p>
+      </div>
     </aside>
 
-    <main class="main"><div class="page">
-      <section class="view active" data-view="dashboard">
-        <header class="page-header"><div><p class="eyebrow">NINEWORKS TAX</p><h1 class="page-title">재무 현황</h1><p class="page-description">세금계산서 파일을 기준으로 거래처, 거래금액, 거래명세서와 견적서를 하나의 거래 데이터로 관리합니다.</p></div><div class="header-actions"><button class="btn btn-secondary" id="goTransactions" type="button">거래 검색</button><button class="btn btn-primary" id="goUpload" type="button">세금계산서 업로드</button></div></header>
-        <section class="metrics" aria-label="주요 지표">
-          <div class="metric"><div class="metric-label">누적 매출</div><div class="metric-value" id="mRevenue">₩0</div><div class="metric-meta">공급가액 기준</div></div>
-          <div class="metric"><div class="metric-label">입금 완료</div><div class="metric-value" id="mPaid">₩0</div><div class="metric-meta" id="mPaidMeta">0% 수금</div></div>
-          <div class="metric"><div class="metric-label">미수금</div><div class="metric-value" id="mReceivable">₩0</div><div class="metric-meta" id="mReceivableMeta">0건 확인 필요</div></div>
-          <div class="metric"><div class="metric-label">누적 매입</div><div class="metric-value" id="mPurchase">₩0</div><div class="metric-meta" id="mPurchaseMeta">0건</div></div>
-        </section>
-        <div class="grid-main">
-          <section class="section"><div class="section-header"><div><h2 class="section-title">세금계산서 업로드</h2><p class="section-description">파일 하나로 거래 데이터와 문서 생성을 시작합니다.</p></div></div>
-            <div class="upload-zone"><div class="upload-icon">⇧</div><h3 class="upload-title">세금계산서를 여기에 놓아주세요.</h3><p class="upload-description">파일을 드래그하거나 직접 선택할 수 있습니다.</p><p class="upload-support">PDF · XML · JPG · PNG</p><button class="btn btn-primary" type="button" data-pick-file>파일 선택하기</button><div class="upload-progress hidden" id="uploadProgress"></div></div>
+    <main class="main">
+      <div class="page">
+        <section class="view active" data-view="dashboard">
+          <header class="page-header">
+            <div>
+              <p class="eyebrow">NINEWORKS TAX</p>
+              <h1 class="page-title">재무 현황</h1>
+              <p class="page-description">세금계산서 파일을 기준으로 거래처, 거래금액, 거래명세서와 견적서를 하나의 거래 데이터로 관리합니다.</p>
+            </div>
+            <div class="header-actions">
+              <button class="btn btn-secondary" id="goTransactions" type="button">거래 검색</button>
+              <button class="btn btn-primary" id="goUpload" type="button">세금계산서 업로드</button>
+            </div>
+          </header>
+
+          <section class="metrics" aria-label="주요 지표">
+            <div class="metric"><div class="metric-label">누적 매출</div><div class="metric-value" id="mRevenue">₩0</div><div class="metric-meta">공급가액 기준</div></div>
+            <div class="metric"><div class="metric-label">입금 완료</div><div class="metric-value" id="mPaid">₩0</div><div class="metric-meta" id="mPaidMeta">0% 수금</div></div>
+            <div class="metric"><div class="metric-label">미수금</div><div class="metric-value" id="mReceivable">₩0</div><div class="metric-meta" id="mReceivableMeta">0건 확인 필요</div></div>
+            <div class="metric"><div class="metric-label">누적 매입</div><div class="metric-value" id="mPurchase">₩0</div><div class="metric-meta" id="mPurchaseMeta">0건</div></div>
           </section>
-          <aside class="section"><div class="section-header"><div><h2 class="section-title">업로드 후 자동 처리</h2><p class="section-description">등록 전 추출 결과를 한 번 확인합니다.</p></div></div><div class="panel summary-panel"><dl class="summary-list"><div class="summary-row"><dt>PDF / XML / 이미지</dt><dd>자동 읽기</dd></div><div class="summary-row"><dt>거래처 자동 매칭</dt><dd>사업자번호 기준</dd></div><div class="summary-row"><dt>거래 자동 생성</dt><dd>매출 / 매입</dd></div><div class="summary-row"><dt>거래명세서</dt><dd>PDF 출력</dd></div><div class="summary-row"><dt>견적서</dt><dd>초안 생성</dd></div><div class="summary-row summary-total"><dt>누적 거래액</dt><dd>자동 반영</dd></div></dl></div></aside>
-        </div>
-        <section class="section-block"><div class="section-header"><div><h2 class="section-title">최근 거래</h2><p class="section-description">최근 등록된 거래와 계산서·입금 상태입니다.</p></div><button class="btn btn-ghost" type="button" onclick="document.querySelector('[data-view=transactions]').click()">전체 거래 보기</button></div><div class="table-wrap"><table><thead><tr><th>거래처</th><th>거래 내용</th><th>거래일</th><th style="text-align:right">거래금액</th><th>세금계산서</th><th>입금</th><th>문서</th></tr></thead><tbody id="recentBody"></tbody></table></div></section>
-      </section>
 
-      <section class="view" data-view="upload">
-        <header class="page-header"><div><p class="eyebrow">UPLOAD</p><h1 class="page-title">문서 업로드</h1><p class="page-description">세금계산서를 읽어 거래 데이터를 자동 추출합니다. 자동 인식값은 등록 전에 수정할 수 있습니다.</p></div></header>
-        <div class="upload-zone"><div class="upload-icon">⇧</div><h3 class="upload-title">세금계산서 파일을 선택하세요.</h3><p class="upload-description">PDF는 텍스트 추출, XML은 구조 읽기, JPG/PNG는 OCR을 시도합니다.</p><p class="upload-support">파일은 이 테스트 단계에서 외부 서버에 저장하지 않습니다.</p><button class="btn btn-primary" type="button" data-pick-file>파일 선택하기</button></div>
-      </section>
+          <div class="grid-main">
+            <section class="section">
+              <div class="section-header"><div><h2 class="section-title">세금계산서 업로드</h2><p class="section-description">파일 하나로 거래 데이터와 문서 생성을 시작합니다.</p></div></div>
+              <div class="upload-zone">
+                <div class="upload-icon">⇧</div>
+                <h3 class="upload-title">세금계산서를 여기에 놓아주세요.</h3>
+                <p class="upload-description">파일을 드래그하거나 직접 선택할 수 있습니다.</p>
+                <p class="upload-support">PDF · XML · JPG · PNG</p>
+                <button class="btn btn-primary" type="button" data-pick-file>파일 선택하기</button>
+                <div class="upload-progress hidden" id="uploadProgress"></div>
+              </div>
+            </section>
 
-      <section class="view" data-view="transactions">
-        <header class="page-header"><div><p class="eyebrow">TRANSACTIONS</p><h1 class="page-title">거래</h1><p class="page-description">등록된 거래를 조회하고 거래명세서와 견적서 초안을 생성합니다.</p></div><div class="header-actions"><input id="searchInput" class="input" placeholder="거래처 또는 거래내용 검색" style="width:280px"></div></header>
-        <div class="table-wrap"><table><thead><tr><th>거래처</th><th>거래 내용</th><th>거래일</th><th style="text-align:right">거래금액</th><th>세금계산서</th><th>입금</th><th>문서</th></tr></thead><tbody id="transactionsBody"></tbody></table></div>
-      </section>
+            <aside class="section">
+              <div class="section-header"><div><h2 class="section-title">업로드 후 자동 처리</h2><p class="section-description">등록 전 추출 결과를 한 번 확인합니다.</p></div></div>
+              <div class="panel summary-panel"><dl class="summary-list">
+                <div class="summary-row"><dt>PDF / XML / 이미지</dt><dd>자동 읽기</dd></div>
+                <div class="summary-row"><dt>거래처 자동 매칭</dt><dd>사업자번호 기준</dd></div>
+                <div class="summary-row"><dt>거래 자동 생성</dt><dd>매출 / 매입</dd></div>
+                <div class="summary-row"><dt>거래명세서</dt><dd>PDF 출력</dd></div>
+                <div class="summary-row"><dt>견적서</dt><dd>초안 생성</dd></div>
+                <div class="summary-row summary-total"><dt>누적 거래액</dt><dd>자동 반영</dd></div>
+              </dl></div>
+            </aside>
+          </div>
 
-      <section class="view" data-view="clients">
-        <header class="page-header"><div><p class="eyebrow">CLIENTS</p><h1 class="page-title">거래처</h1><p class="page-description">사업자번호 기준으로 거래를 묶고 누적 거래액과 미수금을 자동 계산합니다.</p></div></header>
-        <div class="table-wrap"><table><thead><tr><th>거래처</th><th>사업자번호</th><th>거래수</th><th style="text-align:right">공급가액</th><th style="text-align:right">누적 거래액</th><th style="text-align:right">미수금</th></tr></thead><tbody id="clientsBody"></tbody></table></div>
-      </section>
+          <section class="section-block">
+            <div class="section-header"><div><h2 class="section-title">최근 거래</h2><p class="section-description">최근 등록된 거래와 계산서·입금 상태입니다.</p></div><button class="btn btn-ghost" id="goAllTransactions" type="button">전체 거래 보기</button></div>
+            <div class="table-wrap"><table><thead><tr><th>거래처</th><th>거래 내용</th><th>거래일</th><th style="text-align:right">거래금액</th><th>세금계산서</th><th>입금</th><th>문서</th></tr></thead><tbody id="recentBody"></tbody></table></div>
+          </section>
+        </section>
 
-      <section class="view" data-view="documents">
-        <header class="page-header"><div><p class="eyebrow">DOCUMENTS</p><h1 class="page-title">문서</h1><p class="page-description">등록된 거래에서 거래명세서와 견적서 초안을 생성하고 브라우저에서 PDF로 저장할 수 있습니다.</p></div></header>
-        <div class="table-wrap"><table><thead><tr><th>거래처</th><th>거래 내용</th><th>거래일</th><th>생성</th></tr></thead><tbody id="documentsBody"></tbody></table></div>
-      </section>
+        <section class="view" data-view="upload">
+          <header class="page-header"><div><p class="eyebrow">UPLOAD</p><h1 class="page-title">문서 업로드</h1><p class="page-description">세금계산서를 읽어 거래 데이터를 자동 추출합니다. 자동 인식값은 등록 전에 수정할 수 있습니다.</p></div></header>
+          <div class="upload-zone">
+            <div class="upload-icon">⇧</div>
+            <h3 class="upload-title">세금계산서 파일을 선택하세요.</h3>
+            <p class="upload-description">PDF는 텍스트 추출, XML은 구조 읽기, JPG/PNG는 OCR을 시도합니다.</p>
+            <p class="upload-support">테스트 단계에서는 파일 자체를 서버에 저장하지 않습니다.</p>
+            <button class="btn btn-primary" type="button" data-pick-file>파일 선택하기</button>
+          </div>
+        </section>
 
-      <section class="view" data-view="stats">
-        <header class="page-header"><div><p class="eyebrow">STATISTICS</p><h1 class="page-title">통계</h1><p class="page-description">현재 브라우저에 등록된 거래를 기준으로 계산한 요약입니다.</p></div></header><div class="metrics" id="statsGrid"></div>
-      </section>
+        <section class="view" data-view="transactions">
+          <header class="page-header"><div><p class="eyebrow">TRANSACTIONS</p><h1 class="page-title">거래</h1><p class="page-description">등록된 거래를 조회하고 거래명세서와 견적서 초안을 생성합니다.</p></div><div class="header-actions"><input id="searchInput" class="input" placeholder="거래처 또는 거래내용 검색" style="width:280px"></div></header>
+          <div class="table-wrap"><table><thead><tr><th>거래처</th><th>거래 내용</th><th>거래일</th><th style="text-align:right">거래금액</th><th>세금계산서</th><th>입금</th><th>문서</th></tr></thead><tbody id="transactionsBody"></tbody></table></div>
+        </section>
 
-      <section class="view" data-view="settings">
-        <header class="page-header"><div><p class="eyebrow">SETTINGS</p><h1 class="page-title">회사 설정</h1><p class="page-description">나인웍스 사업자정보를 입력하면 세금계산서의 공급자/공급받는자를 비교해 매출·매입 판별에 사용합니다.</p></div></header>
-        <div class="panel form-panel"><div class="form-grid"><div class="field"><label>상호</label><input class="input" id="set_companyName" placeholder="NINEWORKS"></div><div class="field"><label>사업자등록번호</label><input class="input" id="set_businessNumber" placeholder="000-00-00000"></div><div class="field"><label>대표자</label><input class="input" id="set_ceoName"></div><div class="field"><label>이메일</label><input class="input" id="set_email"></div><div class="field full"><label>사업장 주소</label><input class="input" id="set_address"></div><div class="field"><label>전화번호</label><input class="input" id="set_phone"></div></div><div class="form-actions"><button class="btn btn-danger" id="resetData" type="button">테스트 데이터 초기화</button><button class="btn btn-primary" id="saveSettings" type="button">회사 정보 저장하기</button></div></div>
-      </section>
-    </div></main>
+        <section class="view" data-view="clients">
+          <header class="page-header"><div><p class="eyebrow">CLIENTS</p><h1 class="page-title">거래처</h1><p class="page-description">사업자번호 기준으로 거래를 묶고 누적 거래액과 미수금을 자동 계산합니다.</p></div></header>
+          <div class="table-wrap"><table><thead><tr><th>거래처</th><th>사업자번호</th><th>거래수</th><th style="text-align:right">공급가액</th><th style="text-align:right">누적 거래액</th><th style="text-align:right">미수금</th></tr></thead><tbody id="clientsBody"></tbody></table></div>
+        </section>
+
+        <section class="view" data-view="documents">
+          <header class="page-header"><div><p class="eyebrow">DOCUMENTS</p><h1 class="page-title">문서</h1><p class="page-description">등록된 거래에서 거래명세서와 견적서 초안을 생성하고 브라우저에서 PDF로 저장할 수 있습니다.</p></div></header>
+          <div class="table-wrap"><table><thead><tr><th>거래처</th><th>거래 내용</th><th>거래일</th><th>생성</th></tr></thead><tbody id="documentsBody"></tbody></table></div>
+        </section>
+
+        <section class="view" data-view="stats">
+          <header class="page-header"><div><p class="eyebrow">STATISTICS</p><h1 class="page-title">통계</h1><p class="page-description">현재 브라우저에 등록된 거래를 기준으로 계산한 요약입니다.</p></div></header>
+          <div class="metrics" id="statsGrid"></div>
+        </section>
+
+        <section class="view" data-view="settings">
+          <header class="page-header"><div><p class="eyebrow">SETTINGS</p><h1 class="page-title">회사 설정</h1><p class="page-description">나인웍스 사업자정보를 입력하면 세금계산서의 공급자/공급받는자를 비교해 매출·매입 판별에 사용합니다.</p></div></header>
+          <div class="panel form-panel">
+            <div class="form-grid">
+              <div class="field"><label>상호</label><input class="input" id="set_companyName" placeholder="NINEWORKS"></div>
+              <div class="field"><label>사업자등록번호</label><input class="input" id="set_businessNumber" placeholder="000-00-00000"></div>
+              <div class="field"><label>대표자</label><input class="input" id="set_ceoName"></div>
+              <div class="field"><label>이메일</label><input class="input" id="set_email"></div>
+              <div class="field full"><label>사업장 주소</label><input class="input" id="set_address"></div>
+              <div class="field"><label>전화번호</label><input class="input" id="set_phone"></div>
+            </div>
+            <div class="form-actions"><button class="btn btn-danger" id="resetData" type="button">테스트 데이터 초기화</button><button class="btn btn-primary" id="saveSettings" type="button">회사 정보 저장하기</button></div>
+          </div>
+        </section>
+      </div>
+    </main>
   </div>
 
   <div class="modal-backdrop" id="reviewModal" role="dialog" aria-modal="true" aria-labelledby="reviewTitle">
-    <div class="modal"><div class="modal-head"><div><h2 class="modal-title" id="reviewTitle">세금계산서 분석 결과</h2><p class="modal-desc">자동 추출 결과를 확인한 뒤 거래로 등록해주세요.</p></div><button class="modal-close" id="reviewClose" type="button" aria-label="닫기">×</button></div>
-      <div class="modal-body"><div id="reviewWarning" class="inline-note"></div><div class="form-grid" style="margin-top:20px"><div class="field full"><label>파일명</label><input class="input" id="r_fileName" readonly></div><div class="field"><label>거래일</label><input class="input" id="r_date" type="date"></div><div class="field"><label>거래 구분</label><select class="select" id="r_type"><option value="sale">매출</option><option value="purchase">매입</option></select></div><div class="field"><label>거래처명</label><input class="input" id="r_clientName"></div><div class="field"><label>거래처 사업자번호</label><input class="input" id="r_businessNumber"></div><div class="field full"><label>거래 내용 / 품목</label><input class="input" id="r_title"></div><div class="field"><label>공급가액</label><input class="input" id="r_supply" inputmode="numeric"></div><div class="field"><label>VAT</label><input class="input" id="r_vat" inputmode="numeric"></div><div class="field full"><label>합계금액</label><input class="input" id="r_total" inputmode="numeric"></div><div class="field"><label>공급자 상호</label><input class="input" id="r_supplierName"></div><div class="field"><label>공급자 사업자번호</label><input class="input" id="r_supplierBiz"></div><div class="field"><label>공급받는 자 상호</label><input class="input" id="r_buyerName"></div><div class="field"><label>공급받는 자 사업자번호</label><input class="input" id="r_buyerBiz"></div></div></div>
+    <div class="modal">
+      <div class="modal-head"><div><h2 class="modal-title" id="reviewTitle">세금계산서 분석 결과</h2><p class="modal-desc">자동 추출 결과를 확인한 뒤 거래로 등록해주세요.</p></div><button class="modal-close" id="reviewClose" type="button" aria-label="닫기">×</button></div>
+      <div class="modal-body">
+        <div id="reviewWarning" class="inline-note"></div>
+        <div class="form-grid" style="margin-top:20px">
+          <div class="field full"><label>파일명</label><input class="input" id="r_fileName" readonly></div>
+          <div class="field"><label>거래일</label><input class="input" id="r_date" type="date"></div>
+          <div class="field"><label>거래 구분</label><select class="select" id="r_type"><option value="sale">매출</option><option value="purchase">매입</option></select></div>
+          <div class="field"><label>거래처명</label><input class="input" id="r_clientName"></div>
+          <div class="field"><label>거래처 사업자번호</label><input class="input" id="r_businessNumber"></div>
+          <div class="field full"><label>거래 내용 / 품목</label><input class="input" id="r_title"></div>
+          <div class="field"><label>공급가액</label><input class="input" id="r_supply" inputmode="numeric"></div>
+          <div class="field"><label>VAT</label><input class="input" id="r_vat" inputmode="numeric"></div>
+          <div class="field full"><label>합계금액</label><input class="input" id="r_total" inputmode="numeric"></div>
+          <div class="field"><label>공급자 상호</label><input class="input" id="r_supplierName"></div>
+          <div class="field"><label>공급자 사업자번호</label><input class="input" id="r_supplierBiz"></div>
+          <div class="field"><label>공급받는 자 상호</label><input class="input" id="r_buyerName"></div>
+          <div class="field"><label>공급받는 자 사업자번호</label><input class="input" id="r_buyerBiz"></div>
+        </div>
+      </div>
       <div class="modal-footer"><button class="btn btn-ghost" id="reviewCancel" type="button">취소</button><button class="btn btn-secondary" id="reviewOriginal" type="button">원본 보기</button><button class="btn btn-primary" id="reviewRegister" type="button">거래 등록하기</button></div>
     </div>
   </div>
+
   <div class="toast" id="toast" role="status"></div>
-  <script src="./assets/app.js"></script>
+
+  <script>
+    window.NWT_BUILD = '2026.09.12-1530';
+    window.addEventListener('error', function (event) {
+      console.error('[NINEWORKS TAX]', event.error || event.message);
+    });
+  </script>
+  <script src="./assets/app.js?v=20260912-1530"></script>
 </body>
 </html>
