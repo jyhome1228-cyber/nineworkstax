@@ -1,318 +1,86 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#395edf" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#395edf">
   <title>NINEWORKS TAX</title>
-  <meta name="description" content="세금계산서 기반 거래·거래처·문서 통합 관리 시스템" />
-  <style>
-    :root {
-      --brand-primary: #395edf;
-      --brand-primary-hover: #3153c8;
-      --brand-primary-soft: #f6f8fe;
-      --brand-deep: #294a94;
-      --brand-secondary: #488090;
-      --bg: #f7f9fc;
-      --surface: #ffffff;
-      --surface-subtle: #fbfcfe;
-      --text-primary: #182033;
-      --text-secondary: #596274;
-      --text-tertiary: #8991a0;
-      --border: #e4e8f0;
-      --border-strong: #cfd6e3;
-      --success: #24845f;
-      --success-soft: #edf8f3;
-      --warning: #b66a13;
-      --warning-soft: #fff7e8;
-      --sidebar: 232px;
-    }
-
-    * { box-sizing: border-box; }
-    html { background: var(--bg); }
-    body {
-      margin: 0;
-      color: var(--text-primary);
-      background: var(--bg);
-      font-family: Pretendard, SUIT, "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 14px;
-      line-height: 1.55;
-      letter-spacing: -0.012em;
-      -webkit-font-smoothing: antialiased;
-    }
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    a { color: inherit; text-decoration: none; }
-    :focus-visible { outline: 3px solid rgba(57,94,223,.22); outline-offset: 2px; }
-
-    .app-shell {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: var(--sidebar) minmax(0, 1fr);
-    }
-
-    .sidebar {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      padding: 28px 20px 24px;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .brand { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 8px; }
-    .brand-mark {
-      width: 28px; height: 28px; border-radius: 8px;
-      background: var(--brand-primary); color: white;
-      display: grid; place-items: center; font-size: 12px; font-weight: 700;
-    }
-    .brand-copy strong { display: block; font-size: 15px; line-height: 1.2; font-weight: 700; }
-    .brand-copy span { display: block; margin-top: 2px; color: var(--text-tertiary); font-size: 11px; }
-
-    .nav { display: grid; gap: 4px; margin-top: 36px; }
-    .nav-item {
-      min-height: 40px; display: flex; align-items: center; gap: 10px;
-      padding: 0 12px; color: var(--text-secondary); border-radius: 8px;
-      font-size: 14px; font-weight: 500;
-    }
-    .nav-item:hover, .nav-item.active { background: var(--brand-primary-soft); color: var(--brand-primary); }
-    .nav-item.active { font-weight: 700; }
-    .nav-icon { width: 18px; display: inline-grid; place-items: center; opacity: .9; }
-    .sidebar-foot { margin-top: auto; padding: 20px 8px 0; color: var(--text-tertiary); font-size: 12px; }
-
-    .main { min-width: 0; padding: 32px; }
-    .page { width: min(100%, 1280px); margin-inline: auto; }
-
-    .page-header {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      gap: 24px; margin-bottom: 32px;
-    }
-    .eyebrow { margin: 0 0 8px; color: var(--brand-primary); font-size: 12px; font-weight: 700; letter-spacing: .04em; }
-    .page-title { margin: 0; font-size: 28px; line-height: 1.25; font-weight: 700; letter-spacing: -0.03em; }
-    .page-description { max-width: 680px; margin: 10px 0 0; color: var(--text-secondary); line-height: 1.6; }
-    .header-actions { display: flex; align-items: center; gap: 8px; }
-
-    .btn {
-      height: 40px; border: 0; border-radius: 8px; padding: 0 16px;
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      font-size: 14px; font-weight: 600; white-space: nowrap;
-    }
-    .btn-primary { background: var(--brand-primary); color: white; }
-    .btn-primary:hover { background: var(--brand-primary-hover); }
-    .btn-secondary { background: var(--surface); color: var(--text-primary); border: 1px solid var(--border-strong); }
-    .btn-ghost { background: transparent; color: var(--text-secondary); padding-inline: 10px; }
-
-    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 32px; }
-    .metric { min-width: 0; padding: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
-    .metric-label { color: var(--text-secondary); font-size: 13px; font-weight: 600; }
-    .metric-value { margin-top: 10px; font-size: 24px; line-height: 1.25; font-weight: 700; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
-    .metric-meta { margin-top: 8px; color: var(--text-tertiary); font-size: 12px; }
-
-    .grid-main { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(320px, .6fr); gap: 24px; align-items: start; }
-    .section { min-width: 0; }
-    .transactions { margin-top: 40px; }
-    .section-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
-    .section-title { margin: 0; font-size: 18px; line-height: 1.35; font-weight: 700; }
-    .section-description { margin: 6px 0 0; color: var(--text-tertiary); font-size: 13px; }
-
-    .upload-zone {
-      position: relative; min-height: 292px; padding: 32px; background: var(--surface);
-      border: 1px dashed #afbbd0; border-radius: 16px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; transition: border-color .16s ease, background .16s ease;
-      cursor: pointer;
-    }
-    .upload-zone:hover { border-color: var(--brand-primary); background: #fbfcff; }
-    .upload-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; color: var(--brand-primary); background: var(--brand-primary-soft); margin-bottom: 16px; font-size: 22px; }
-    .upload-title { margin: 0; font-size: 18px; line-height: 1.4; font-weight: 700; }
-    .upload-description { margin: 8px 0 0; color: var(--text-secondary); }
-    .upload-support { margin: 6px 0 20px; color: var(--text-tertiary); font-size: 12px; }
-
-    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
-    .summary-panel { padding: 20px; }
-    .summary-list { display: grid; gap: 16px; margin: 0; }
-    .summary-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-    .summary-row dt { color: var(--text-secondary); font-size: 13px; }
-    .summary-row dd { margin: 0; font-size: 14px; font-weight: 700; }
-    .summary-total { margin-top: 4px; padding-top: 20px; border-top: 1px solid var(--border); }
-    .summary-total dd { color: var(--brand-primary); font-size: 18px; }
-
-    .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
-    table { width: 100%; border-collapse: collapse; min-width: 720px; }
-    th, td { padding: 14px 16px; text-align: left; vertical-align: middle; }
-    th { color: var(--text-tertiary); background: var(--surface-subtle); font-size: 12px; font-weight: 600; border-bottom: 1px solid var(--border); }
-    td { color: var(--text-secondary); font-size: 13px; border-bottom: 1px solid #edf0f5; }
-    tbody tr:last-child td { border-bottom: 0; }
-    tbody tr:hover td { background: #fbfcff; }
-    .cell-main { color: var(--text-primary); font-weight: 600; }
-    .amount { text-align: right; color: var(--text-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
-    .status { display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
-    .status-success { color: var(--success); background: var(--success-soft); }
-    .status-warning { color: var(--warning); background: var(--warning-soft); }
-    .status-primary { color: var(--brand-primary); background: var(--brand-primary-soft); }
-
-    .mobile-topbar { display: none; }
-    .toast {
-      position: fixed; right: 24px; bottom: 24px; z-index: 50;
-      max-width: 360px; padding: 14px 16px; border-radius: 10px;
-      background: #182033; color: white; box-shadow: 0 10px 30px rgba(24,32,51,.18);
-      opacity: 0; transform: translateY(8px); pointer-events: none; transition: .2s ease;
-    }
-    .toast.show { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 1279px) {
-      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .grid-main { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 767px) {
-      .app-shell { display: block; }
-      .sidebar { display: none; }
-      .mobile-topbar {
-        position: sticky; top: 0; z-index: 20; height: 56px; padding: 0 16px;
-        background: rgba(255,255,255,.96); border-bottom: 1px solid var(--border);
-        display: flex; align-items: center; justify-content: space-between;
-      }
-      .mobile-brand { font-size: 14px; font-weight: 700; }
-      .mobile-menu { width: 36px; height: 36px; padding: 0; border: 0; border-radius: 8px; background: transparent; font-size: 20px; }
-      .main { padding: 24px 16px 64px; }
-      .page-header { display: block; margin-bottom: 24px; }
-      .page-title { font-size: 24px; }
-      .header-actions { margin-top: 20px; }
-      .header-actions .btn { flex: 1; }
-      .metrics { grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-      .metric { padding: 16px; }
-      .metric-value { font-size: 20px; }
-      .upload-zone { min-height: 260px; padding: 24px 16px; }
-      .transactions { margin-top: 32px; }
-    }
-    @media (max-width: 479px) {
-      .metrics { grid-template-columns: 1fr; }
-      .header-actions { flex-direction: column-reverse; align-items: stretch; }
-    }
-  </style>
+  <meta name="description" content="세금계산서 기반 거래·거래처·문서 통합 관리 시스템">
+  <link rel="stylesheet" href="./assets/styles.css">
 </head>
 <body>
-  <header class="mobile-topbar">
-    <div class="mobile-brand">NINEWORKS TAX</div>
-    <button class="mobile-menu" type="button" aria-label="메뉴 열기">☰</button>
-  </header>
-
+  <input id="fileInput" type="file" accept=".pdf,.xml,.jpg,.jpeg,.png" hidden>
+  <header class="mobile-topbar"><div class="mobile-brand">NINEWORKS TAX</div><button class="mobile-menu" type="button" aria-label="메뉴">☰</button></header>
   <div class="app-shell">
     <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-mark">N</div>
-        <div class="brand-copy"><strong>NINEWORKS TAX</strong><span>Finance Operations</span></div>
-      </div>
+      <div class="brand"><div class="brand-mark">N</div><div class="brand-copy"><strong>NINEWORKS TAX</strong><span>Finance Operations</span></div></div>
       <nav class="nav" aria-label="주요 메뉴">
-        <a class="nav-item active" href="#"><span class="nav-icon">⌂</span>대시보드</a>
-        <a class="nav-item" href="#upload"><span class="nav-icon">⇧</span>문서 업로드</a>
-        <a class="nav-item" href="#transactions"><span class="nav-icon">▤</span>거래</a>
-        <a class="nav-item" href="#"><span class="nav-icon">◎</span>거래처</a>
-        <a class="nav-item" href="#"><span class="nav-icon">□</span>문서</a>
-        <a class="nav-item" href="#"><span class="nav-icon">▥</span>통계</a>
+        <a class="nav-item active" href="#" data-view="dashboard"><span class="nav-icon">⌂</span>대시보드</a>
+        <a class="nav-item" href="#" data-view="upload"><span class="nav-icon">⇧</span>문서 업로드</a>
+        <a class="nav-item" href="#" data-view="transactions"><span class="nav-icon">▤</span>거래</a>
+        <a class="nav-item" href="#" data-view="clients"><span class="nav-icon">◎</span>거래처</a>
+        <a class="nav-item" href="#" data-view="documents"><span class="nav-icon">□</span>문서</a>
+        <a class="nav-item" href="#" data-view="stats"><span class="nav-icon">▥</span>통계</a>
       </nav>
-      <div class="sidebar-foot"><div>⚙ 설정</div><p>© 2026 NINEWORKS</p></div>
+      <div class="sidebar-foot"><button type="button" data-view="settings" class="nav-item" style="padding-left:0">⚙ 설정</button><p>© 2026 NINEWORKS</p></div>
     </aside>
 
-    <main class="main">
-      <div class="page">
-        <header class="page-header">
-          <div>
-            <p class="eyebrow">2026.09</p>
-            <h1 class="page-title">재무 현황</h1>
-            <p class="page-description">세금계산서 파일을 기준으로 거래처, 거래금액, 거래명세서와 견적서를 하나의 거래 데이터로 관리합니다.</p>
-          </div>
-          <div class="header-actions">
-            <button class="btn btn-secondary" type="button" data-demo="검색 기능은 다음 개발 단계에서 연결됩니다.">거래 검색</button>
-            <button class="btn btn-primary" type="button" id="topUpload">세금계산서 업로드</button>
-          </div>
-        </header>
-
-        <section class="metrics" aria-label="월간 주요 지표">
-          <div class="metric"><div class="metric-label">이번 달 매출</div><div class="metric-value">₩14,850,000</div><div class="metric-meta">공급가액 기준</div></div>
-          <div class="metric"><div class="metric-label">입금 완료</div><div class="metric-value">₩10,890,000</div><div class="metric-meta">73.3% 수금</div></div>
-          <div class="metric"><div class="metric-label">미수금</div><div class="metric-value">₩3,960,000</div><div class="metric-meta">2건 확인 필요</div></div>
-          <div class="metric"><div class="metric-label">이번 달 매입</div><div class="metric-value">₩4,320,000</div><div class="metric-meta">증빙 7건</div></div>
+    <main class="main"><div class="page">
+      <section class="view active" data-view="dashboard">
+        <header class="page-header"><div><p class="eyebrow">NINEWORKS TAX</p><h1 class="page-title">재무 현황</h1><p class="page-description">세금계산서 파일을 기준으로 거래처, 거래금액, 거래명세서와 견적서를 하나의 거래 데이터로 관리합니다.</p></div><div class="header-actions"><button class="btn btn-secondary" id="goTransactions" type="button">거래 검색</button><button class="btn btn-primary" id="goUpload" type="button">세금계산서 업로드</button></div></header>
+        <section class="metrics" aria-label="주요 지표">
+          <div class="metric"><div class="metric-label">누적 매출</div><div class="metric-value" id="mRevenue">₩0</div><div class="metric-meta">공급가액 기준</div></div>
+          <div class="metric"><div class="metric-label">입금 완료</div><div class="metric-value" id="mPaid">₩0</div><div class="metric-meta" id="mPaidMeta">0% 수금</div></div>
+          <div class="metric"><div class="metric-label">미수금</div><div class="metric-value" id="mReceivable">₩0</div><div class="metric-meta" id="mReceivableMeta">0건 확인 필요</div></div>
+          <div class="metric"><div class="metric-label">누적 매입</div><div class="metric-value" id="mPurchase">₩0</div><div class="metric-meta" id="mPurchaseMeta">0건</div></div>
         </section>
-
-        <div class="grid-main" id="upload">
-          <section class="section">
-            <div class="section-header"><div><h2 class="section-title">세금계산서 업로드</h2><p class="section-description">파일 하나로 거래 데이터와 문서 생성을 시작합니다.</p></div></div>
-            <label class="upload-zone" for="invoiceFile">
-              <input id="invoiceFile" type="file" accept=".pdf,.xml,.jpg,.jpeg,.png" hidden />
-              <span class="upload-icon">⇧</span>
-              <h3 class="upload-title">세금계산서를 여기에 놓아주세요.</h3>
-              <p class="upload-description" id="uploadDescription">파일을 선택해 업로드 UI를 테스트할 수 있습니다.</p>
-              <p class="upload-support" id="uploadSupport">PDF · XML · JPG · PNG</p>
-              <span class="btn btn-primary">파일 선택하기</span>
-            </label>
+        <div class="grid-main">
+          <section class="section"><div class="section-header"><div><h2 class="section-title">세금계산서 업로드</h2><p class="section-description">파일 하나로 거래 데이터와 문서 생성을 시작합니다.</p></div></div>
+            <div class="upload-zone"><div class="upload-icon">⇧</div><h3 class="upload-title">세금계산서를 여기에 놓아주세요.</h3><p class="upload-description">파일을 드래그하거나 직접 선택할 수 있습니다.</p><p class="upload-support">PDF · XML · JPG · PNG</p><button class="btn btn-primary" type="button" data-pick-file>파일 선택하기</button><div class="upload-progress hidden" id="uploadProgress"></div></div>
           </section>
-
-          <aside class="section">
-            <div class="section-header"><div><h2 class="section-title">업로드 후 자동 처리</h2><p class="section-description">등록 전 추출 결과를 한 번 확인합니다.</p></div></div>
-            <div class="panel summary-panel">
-              <dl class="summary-list">
-                <div class="summary-row"><dt>거래처 자동 매칭</dt><dd>사업자번호 기준</dd></div>
-                <div class="summary-row"><dt>거래 자동 생성</dt><dd>매출 / 매입 분류</dd></div>
-                <div class="summary-row"><dt>거래명세서</dt><dd>자동 초안</dd></div>
-                <div class="summary-row"><dt>견적서</dt><dd>자동 초안</dd></div>
-                <div class="summary-row summary-total"><dt>누적 거래액</dt><dd>자동 반영</dd></div>
-              </dl>
-            </div>
-          </aside>
+          <aside class="section"><div class="section-header"><div><h2 class="section-title">업로드 후 자동 처리</h2><p class="section-description">등록 전 추출 결과를 한 번 확인합니다.</p></div></div><div class="panel summary-panel"><dl class="summary-list"><div class="summary-row"><dt>PDF / XML / 이미지</dt><dd>자동 읽기</dd></div><div class="summary-row"><dt>거래처 자동 매칭</dt><dd>사업자번호 기준</dd></div><div class="summary-row"><dt>거래 자동 생성</dt><dd>매출 / 매입</dd></div><div class="summary-row"><dt>거래명세서</dt><dd>PDF 출력</dd></div><div class="summary-row"><dt>견적서</dt><dd>초안 생성</dd></div><div class="summary-row summary-total"><dt>누적 거래액</dt><dd>자동 반영</dd></div></dl></div></aside>
         </div>
+        <section class="section-block"><div class="section-header"><div><h2 class="section-title">최근 거래</h2><p class="section-description">최근 등록된 거래와 계산서·입금 상태입니다.</p></div><button class="btn btn-ghost" type="button" onclick="document.querySelector('[data-view=transactions]').click()">전체 거래 보기</button></div><div class="table-wrap"><table><thead><tr><th>거래처</th><th>거래 내용</th><th>거래일</th><th style="text-align:right">거래금액</th><th>세금계산서</th><th>입금</th><th>문서</th></tr></thead><tbody id="recentBody"></tbody></table></div></section>
+      </section>
 
-        <section class="section transactions" id="transactions">
-          <div class="section-header">
-            <div><h2 class="section-title">최근 거래</h2><p class="section-description">최근 등록된 거래와 계산서·입금 상태입니다.</p></div>
-            <button class="btn btn-ghost" type="button" data-demo="거래 목록 페이지는 다음 단계에서 연결됩니다.">전체 거래 보기</button>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>거래처</th><th>거래 내용</th><th style="text-align:right">거래금액</th><th>세금계산서</th><th>입금</th></tr></thead>
-              <tbody>
-                <tr><td class="cell-main">인천대학교 산학협력단</td><td>브랜딩 전략 컨설팅</td><td class="amount">₩3,300,000</td><td><span class="status status-primary">발행 완료</span></td><td><span class="status status-warning">입금 대기</span></td></tr>
-                <tr><td class="cell-main">건강미</td><td>브랜드 운영</td><td class="amount">₩1,980,000</td><td><span class="status status-primary">발행 완료</span></td><td><span class="status status-success">입금 완료</span></td></tr>
-                <tr><td class="cell-main">ODE BELL</td><td>브랜드 디자인</td><td class="amount">₩3,300,000</td><td><span class="status status-warning">확인 필요</span></td><td><span class="status status-warning">입금 대기</span></td></tr>
-                <tr><td class="cell-main">PHYTO REVOLUTION</td><td>브랜딩 프로젝트</td><td class="amount">₩1,650,000</td><td><span class="status status-primary">발행 완료</span></td><td><span class="status status-success">입금 완료</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </div>
-    </main>
+      <section class="view" data-view="upload">
+        <header class="page-header"><div><p class="eyebrow">UPLOAD</p><h1 class="page-title">문서 업로드</h1><p class="page-description">세금계산서를 읽어 거래 데이터를 자동 추출합니다. 자동 인식값은 등록 전에 수정할 수 있습니다.</p></div></header>
+        <div class="upload-zone"><div class="upload-icon">⇧</div><h3 class="upload-title">세금계산서 파일을 선택하세요.</h3><p class="upload-description">PDF는 텍스트 추출, XML은 구조 읽기, JPG/PNG는 OCR을 시도합니다.</p><p class="upload-support">파일은 이 테스트 단계에서 외부 서버에 저장하지 않습니다.</p><button class="btn btn-primary" type="button" data-pick-file>파일 선택하기</button></div>
+      </section>
+
+      <section class="view" data-view="transactions">
+        <header class="page-header"><div><p class="eyebrow">TRANSACTIONS</p><h1 class="page-title">거래</h1><p class="page-description">등록된 거래를 조회하고 거래명세서와 견적서 초안을 생성합니다.</p></div><div class="header-actions"><input id="searchInput" class="input" placeholder="거래처 또는 거래내용 검색" style="width:280px"></div></header>
+        <div class="table-wrap"><table><thead><tr><th>거래처</th><th>거래 내용</th><th>거래일</th><th style="text-align:right">거래금액</th><th>세금계산서</th><th>입금</th><th>문서</th></tr></thead><tbody id="transactionsBody"></tbody></table></div>
+      </section>
+
+      <section class="view" data-view="clients">
+        <header class="page-header"><div><p class="eyebrow">CLIENTS</p><h1 class="page-title">거래처</h1><p class="page-description">사업자번호 기준으로 거래를 묶고 누적 거래액과 미수금을 자동 계산합니다.</p></div></header>
+        <div class="table-wrap"><table><thead><tr><th>거래처</th><th>사업자번호</th><th>거래수</th><th style="text-align:right">공급가액</th><th style="text-align:right">누적 거래액</th><th style="text-align:right">미수금</th></tr></thead><tbody id="clientsBody"></tbody></table></div>
+      </section>
+
+      <section class="view" data-view="documents">
+        <header class="page-header"><div><p class="eyebrow">DOCUMENTS</p><h1 class="page-title">문서</h1><p class="page-description">등록된 거래에서 거래명세서와 견적서 초안을 생성하고 브라우저에서 PDF로 저장할 수 있습니다.</p></div></header>
+        <div class="table-wrap"><table><thead><tr><th>거래처</th><th>거래 내용</th><th>거래일</th><th>생성</th></tr></thead><tbody id="documentsBody"></tbody></table></div>
+      </section>
+
+      <section class="view" data-view="stats">
+        <header class="page-header"><div><p class="eyebrow">STATISTICS</p><h1 class="page-title">통계</h1><p class="page-description">현재 브라우저에 등록된 거래를 기준으로 계산한 요약입니다.</p></div></header><div class="metrics" id="statsGrid"></div>
+      </section>
+
+      <section class="view" data-view="settings">
+        <header class="page-header"><div><p class="eyebrow">SETTINGS</p><h1 class="page-title">회사 설정</h1><p class="page-description">나인웍스 사업자정보를 입력하면 세금계산서의 공급자/공급받는자를 비교해 매출·매입 판별에 사용합니다.</p></div></header>
+        <div class="panel form-panel"><div class="form-grid"><div class="field"><label>상호</label><input class="input" id="set_companyName" placeholder="NINEWORKS"></div><div class="field"><label>사업자등록번호</label><input class="input" id="set_businessNumber" placeholder="000-00-00000"></div><div class="field"><label>대표자</label><input class="input" id="set_ceoName"></div><div class="field"><label>이메일</label><input class="input" id="set_email"></div><div class="field full"><label>사업장 주소</label><input class="input" id="set_address"></div><div class="field"><label>전화번호</label><input class="input" id="set_phone"></div></div><div class="form-actions"><button class="btn btn-danger" id="resetData" type="button">테스트 데이터 초기화</button><button class="btn btn-primary" id="saveSettings" type="button">회사 정보 저장하기</button></div></div>
+      </section>
+    </div></main>
   </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script>
-    const fileInput = document.getElementById('invoiceFile');
-    const topUpload = document.getElementById('topUpload');
-    const support = document.getElementById('uploadSupport');
-    const description = document.getElementById('uploadDescription');
-    const toast = document.getElementById('toast');
-
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add('show');
-      clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
-    }
-
-    topUpload.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', () => {
-      const file = fileInput.files && fileInput.files[0];
-      if (!file) return;
-      support.textContent = file.name;
-      description.textContent = '파일 선택이 완료되었습니다. 실제 문서 분석 기능은 다음 단계에서 연결됩니다.';
-      showToast('파일 선택 완료 · ' + file.name);
-    });
-
-    document.querySelectorAll('[data-demo]').forEach((el) => {
-      el.addEventListener('click', () => showToast(el.getAttribute('data-demo')));
-    });
-  </script>
+  <div class="modal-backdrop" id="reviewModal" role="dialog" aria-modal="true" aria-labelledby="reviewTitle">
+    <div class="modal"><div class="modal-head"><div><h2 class="modal-title" id="reviewTitle">세금계산서 분석 결과</h2><p class="modal-desc">자동 추출 결과를 확인한 뒤 거래로 등록해주세요.</p></div><button class="modal-close" id="reviewClose" type="button" aria-label="닫기">×</button></div>
+      <div class="modal-body"><div id="reviewWarning" class="inline-note"></div><div class="form-grid" style="margin-top:20px"><div class="field full"><label>파일명</label><input class="input" id="r_fileName" readonly></div><div class="field"><label>거래일</label><input class="input" id="r_date" type="date"></div><div class="field"><label>거래 구분</label><select class="select" id="r_type"><option value="sale">매출</option><option value="purchase">매입</option></select></div><div class="field"><label>거래처명</label><input class="input" id="r_clientName"></div><div class="field"><label>거래처 사업자번호</label><input class="input" id="r_businessNumber"></div><div class="field full"><label>거래 내용 / 품목</label><input class="input" id="r_title"></div><div class="field"><label>공급가액</label><input class="input" id="r_supply" inputmode="numeric"></div><div class="field"><label>VAT</label><input class="input" id="r_vat" inputmode="numeric"></div><div class="field full"><label>합계금액</label><input class="input" id="r_total" inputmode="numeric"></div><div class="field"><label>공급자 상호</label><input class="input" id="r_supplierName"></div><div class="field"><label>공급자 사업자번호</label><input class="input" id="r_supplierBiz"></div><div class="field"><label>공급받는 자 상호</label><input class="input" id="r_buyerName"></div><div class="field"><label>공급받는 자 사업자번호</label><input class="input" id="r_buyerBiz"></div></div></div>
+      <div class="modal-footer"><button class="btn btn-ghost" id="reviewCancel" type="button">취소</button><button class="btn btn-secondary" id="reviewOriginal" type="button">원본 보기</button><button class="btn btn-primary" id="reviewRegister" type="button">거래 등록하기</button></div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="./assets/app.js"></script>
 </body>
 </html>
